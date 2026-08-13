@@ -8,7 +8,7 @@ A Roon extension that scrobbles qualifying plays to your PDS as
 ```
 ┌────────────┐   subscribe_zones   ┌──────────────────────┐   createRecord    ┌───────────┐
 │  Roon Core │ ──────────────────▶ │  Roon Extension      │ ────────────────▶ │  Your PDS │
-│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.          │ (Bluesky) │
+│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.         │ (Bluesky) │
 └────────────┘  now_playing        │  • progress tracker  │  feed.play        └───────────┘
                                    │  • teal.fm client    │
                                    │  • retry queue       │
@@ -125,7 +125,7 @@ Roon Core
 | `duration` | `now_playing.length` | Integer seconds |
 | `playedTime` | `new Date().toISOString()` | At threshold crossing |
 | `submissionClientAgent` | `fm.teal.roon-scrobbler/0.1.0` | |
-| `musicServiceBaseDomain` | Settings (default: `local`) | |
+| `musicServiceUri` | Optional setting identifying the music service | |
 
 > **Note:** MbIDs and ISRCs are not available from the Roon transport API and
 > are omitted in this MVP.

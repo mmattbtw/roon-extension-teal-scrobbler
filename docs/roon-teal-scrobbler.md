@@ -21,7 +21,7 @@ directly. These notes are the artifact to track until Linear is back.)
 ```
 ┌────────────┐   subscribe_zones   ┌──────────────────────┐   createRecord    ┌───────────┐
 │  Roon Core │ ──────────────────▶ │  Roon Extension      │ ────────────────▶ │  Your PDS │
-│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.          │ (Bluesky) │
+│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.         │ (Bluesky) │
 └────────────┘  now_playing        │  • progress tracker  │  feed.play        └───────────┘
                                    │  • teal.fm client    │
                                    └──────────────────────┘
@@ -41,7 +41,7 @@ directly. These notes are the artifact to track until Linear is back.)
 | `duration` | `now_playing.length` | seconds |
 | `playedTime` | wall-clock at threshold crossing | ISO datetime |
 | `submissionClientAgent` | constant, e.g. `fm.teal.roon-scrobbler/0.1.0` | |
-| `musicServiceBaseDomain` | `local` (or Tidal/Qobuz if detected) | |
+| `musicServiceUri` | Configured service URI, when available | |
 | MbIDs / ISRC | — | not surfaced by Roon transport API; omitted in MVP |
 
 ## Lexicon reference

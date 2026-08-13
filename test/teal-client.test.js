@@ -8,7 +8,26 @@ const {
     parseArtists,
     TealClient,
     CLIENT_AGENT,
+    COLLECTION,
 } = require("../src/teal-client");
+
+describe("production lexicon", () => {
+    it("uses the production feed.play collection", () => {
+        assert.equal(COLLECTION, "fm.teal.feed.play");
+    });
+
+    it("builds records with the production service field", () => {
+        const client = new TealClient({ musicServiceUri: "https://roon.local" });
+        const record = client._buildRecord({ trackName: "Track" });
+
+        assert.equal(record.$type, "fm.teal.feed.play");
+        assert.equal(record.musicServiceUri, "https://roon.local");
+        assert.deepEqual(
+            Object.keys(record).filter((key) => key.toLowerCase().includes("service")),
+            ["musicServiceUri"]
+        );
+    });
+});
 
 describe("generateTid", () => {
     it("returns a 13-character string", () => {
@@ -122,16 +141,16 @@ describe("TealClient.buildPlayRecord", () => {
         assert.equal(record.submissionClientAgent, CLIENT_AGENT);
     });
 
-    it("defaults musicServiceBaseDomain to 'local'", () => {
+    it("omits musicServiceUri when no service URI is configured", () => {
         const zone = makeZone("A", "T", "Al", 100);
         const record = TealClient.buildPlayRecord(zone, { duration: 100 });
-        assert.equal(record.musicServiceBaseDomain, "local");
+        assert.equal(record.musicServiceUri, undefined);
     });
 
-    it("uses provided musicServiceBaseDomain", () => {
+    it("uses a provided musicServiceUri", () => {
         const zone = makeZone("A", "T", "Al", 100);
-        const record = TealClient.buildPlayRecord(zone, { duration: 100 }, "tidal.com");
-        assert.equal(record.musicServiceBaseDomain, "tidal.com");
+        const record = TealClient.buildPlayRecord(zone, { duration: 100 }, "https://tidal.com");
+        assert.equal(record.musicServiceUri, "https://tidal.com");
     });
 
     it("falls back to now_playing.length when duration not in qualifiedPlayData", () => {

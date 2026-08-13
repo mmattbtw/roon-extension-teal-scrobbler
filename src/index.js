@@ -62,7 +62,7 @@ let _settings = {
     allowed_zone_ids: process.env.TEAL_ALLOWED_ZONE_IDS || "",
     teal_handle: process.env.TEAL_HANDLE || "",
     teal_app_password: process.env.TEAL_APP_PASSWORD || "",
-    music_service_domain: process.env.TEAL_MUSIC_SERVICE_DOMAIN || "local",
+    music_service_uri: process.env.TEAL_MUSIC_SERVICE_URI || "",
 };
 
 // ── Roon extension setup ────────────────────────────────────────────
@@ -105,8 +105,8 @@ function buildSettingsLayout() {
         },
         {
             type: "string",
-            title: "Music Service Domain",
-            setting: "music_service_domain",
+            title: "Music Service URI",
+            setting: "music_service_uri",
         }
     );
     return layout;
@@ -243,7 +243,7 @@ tracker.on("qualified_play", ({ zone_id, zone, listened_seconds, threshold, dura
         return;
     }
 
-    const playRecord = TealClient.buildPlayRecord(zone, { duration }, _settings.music_service_domain);
+    const playRecord = TealClient.buildPlayRecord(zone, { duration }, _settings.music_service_uri);
 
     if (!tealClientReady) {
         console.log("[scrobble] Client not ready — queuing play");
@@ -270,7 +270,7 @@ async function configureTealClient() {
     _configuring = true;
     const handle = _settings.teal_handle;
     const appPassword = _settings.teal_app_password;
-    const musicServiceBaseDomain = _settings.music_service_domain || "local";
+    const musicServiceUri = _settings.music_service_uri || undefined;
 
     if (!handle || !appPassword) {
         console.log("[teal] No credentials configured — submissions disabled");
@@ -278,7 +278,7 @@ async function configureTealClient() {
         return;
     }
 
-    const config = { handle, appPassword, musicServiceBaseDomain };
+    const config = { handle, appPassword, musicServiceUri };
 
     if (tealClient) {
         tealClient.reconfigure(config);

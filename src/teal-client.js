@@ -150,7 +150,7 @@ class TealClient extends EventEmitter {
      * @param {Object} config
      * @param {string} config.handle          Bluesky handle (with or without domain suffix).
      * @param {string} config.appPassword     App password for the PDS.
-     * @param {string} [config.musicServiceBaseDomain]  Default musicServiceBaseDomain for records ("local", "tidal.com", ...).
+     * @param {string} [config.musicServiceUri]  Optional URI identifying the music service.
      * @param {string} [config.userAgent]     Override for the submissionClientAgent field.
      * @param {string} [config.pdsEndpoint]   Pre-known PDS URL (skips DID resolution).
      * @param {string} [config.handleResolver] Base URL for handle resolution (default: bsky.social).
@@ -163,7 +163,7 @@ class TealClient extends EventEmitter {
         /** @type {string|undefined} */
         this._appPassword = config.appPassword;
         /** @type {string} */
-        this._musicServiceBaseDomain = config.musicServiceBaseDomain || "local";
+        this._musicServiceUri = config.musicServiceUri;
         /** @type {string} */
         this._userAgent = config.userAgent || CLIENT_AGENT;
         /** @type {string|undefined} */
@@ -311,8 +311,8 @@ class TealClient extends EventEmitter {
 
         if (config.handle !== undefined) this._handle = config.handle;
         if (config.appPassword !== undefined) this._appPassword = config.appPassword;
-        if (config.musicServiceBaseDomain !== undefined) {
-            this._musicServiceBaseDomain = config.musicServiceBaseDomain;
+        if (config.musicServiceUri !== undefined) {
+            this._musicServiceUri = config.musicServiceUri;
         }
         if (config.userAgent !== undefined) this._userAgent = config.userAgent;
         if (config.pdsEndpoint !== undefined) this._pdsEndpoint = config.pdsEndpoint;
@@ -342,9 +342,9 @@ class TealClient extends EventEmitter {
      * @param {number} qualifiedPlayData.listened_seconds
      * @param {number} qualifiedPlayData.threshold
      * @param {number} [qualifiedPlayData.duration]
-     * @returns {{ trackName: string, artists: Array<{artistName: string}>, releaseName: (string|undefined), duration: (number|undefined), playedTime: string, submissionClientAgent: string, musicServiceBaseDomain: string }}
+     * @returns {{ trackName: string, artists: Array<{artistName: string}>, releaseName: (string|undefined), duration: (number|undefined), playedTime: string, submissionClientAgent: string, musicServiceUri: (string|undefined) }}
      */
-    static buildPlayRecord(zone, qualifiedPlayData, musicServiceBaseDomain = "local") {
+    static buildPlayRecord(zone, qualifiedPlayData, musicServiceUri) {
         const np = zone && zone.now_playing;
         const tl = np && np.three_line ? np.three_line : {};
         const duration = qualifiedPlayData && typeof qualifiedPlayData.duration === "number"
@@ -353,15 +353,17 @@ class TealClient extends EventEmitter {
                 ? Math.floor(np.length)
                 : undefined;
 
-        return {
+        const record = {
             trackName: String(tl.line2 || "Unknown Track"),
             artists: parseArtists(tl.line1),
             releaseName: tl.line3 ? String(tl.line3) : undefined,
             duration: duration,
             playedTime: new Date().toISOString(),
             submissionClientAgent: CLIENT_AGENT,
-            musicServiceBaseDomain,
         };
+
+        if (musicServiceUri) record.musicServiceUri = musicServiceUri;
+        return record;
     }
 
     /* ── AT Protocol internals ──────────────────────────────────────── */
@@ -665,7 +667,7 @@ class TealClient extends EventEmitter {
         }
 
         record.submissionClientAgent = this._userAgent;
-        record.musicServiceBaseDomain = this._musicServiceBaseDomain;
+        if (this._musicServiceUri) record.musicServiceUri = this._musicServiceUri;
 
         return record;
     }
