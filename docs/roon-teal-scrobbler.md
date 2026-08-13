@@ -21,7 +21,7 @@ directly. These notes are the artifact to track until Linear is back.)
 ```
 ┌────────────┐   subscribe_zones   ┌──────────────────────┐   createRecord    ┌───────────┐
 │  Roon Core │ ──────────────────▶ │  Roon Extension      │ ────────────────▶ │  Your PDS │
-│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.alpha.   │ (Bluesky) │
+│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.          │ (Bluesky) │
 └────────────┘  now_playing        │  • progress tracker  │  feed.play        └───────────┘
                                    │  • teal.fm client    │
                                    └──────────────────────┘
@@ -46,9 +46,9 @@ directly. These notes are the artifact to track until Linear is back.)
 
 ## Lexicon reference
 
-- Record: `fm.teal.alpha.feed.play` (`key: tid`). Required: `trackName`.
-- `artists[]` items: `fm.teal.alpha.feed.defs#artist` = `{ artistName (required), artistMbId (optional) }`.
-- Submitted via `com.atproto.repo.createRecord` to collection `fm.teal.alpha.feed.play`, authenticated with handle + app password.
+- Record: `fm.teal.feed.play` (`key: tid`). Required: `trackName`.
+- `artists[]` items: `fm.teal.feed.defs#artist` = `{ artistName (required), artistMbId (optional) }`.
+- Submitted via `com.atproto.repo.createRecord` to collection `fm.teal.feed.play`, authenticated with handle + app password.
 - Tracked threshold (from lexicon description): entire track if <2 min, or half the track up to 4 min, whichever is longest.
 
 ## Key references
@@ -56,7 +56,7 @@ directly. These notes are the artifact to track until Linear is back.)
 - Roon API: `RoonLabs/node-roon-api`, `RoonLabs/node-roon-api-transport`. `subscribe_zones(cb)` → zone state (playing/paused/loading/stopped) + `now_playing` (display lines, `seek_position`, `length`).
 - Analog extension: `fjgalesloot/roon-extension-mqtt`.
 - Existing teal.fm clients (submission pattern): teal-cider (Go), ewanc26/malachite (TS), FoxxMD/multi-scrobbler (tealfm client).
-- Lexicon source: https://raw.githubusercontent.com/teal-fm/teal/refs/heads/main/lexicons/fm.teal.alpha/feed/play.json
+- Lexicon source: https://raw.githubusercontent.com/teal-fm/teal/refs/heads/main/lexicons/fm.teal/feed/play.json
 
 ## Risks / caveats
 
@@ -69,7 +69,7 @@ directly. These notes are the artifact to track until Linear is back.)
 ## Linear: Epic + sub-issues
 
 ### Epic
-**Roon → teal.fm scrobbler extension** — build a Node Roon extension that scrobbles qualifying plays to a user's PDS as `fm.teal.alpha.feed.play` records.
+**Roon → teal.fm scrobbler extension** — build a Node Roon extension that scrobbles qualifying plays to a user's PDS as `fm.teal.feed.play` records.
 
 ### Issue 1 — Scaffold Roon extension + zone subscription
 - `node-roon-api` app skeleton (`extension_id`, discovery, pairing).
@@ -89,7 +89,7 @@ directly. These notes are the artifact to track until Linear is back.)
 - Depends on #1.
 
 ### Issue 4 — teal.fm submission client
-- Authenticated `com.atproto.repo.createRecord` to `fm.teal.alpha.feed.play` using handle + app password.
+- Authenticated `com.atproto.repo.createRecord` to `fm.teal.feed.play` using handle + app password.
 - Map play → record (field mapping table above); generate TID rkey; PDS resolution.
 - Depends on #3 (consumes qualified-play events).
 

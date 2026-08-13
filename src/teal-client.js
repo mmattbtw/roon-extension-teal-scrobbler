@@ -22,7 +22,7 @@ const CLIENT_AGENT = "fm.teal.roon-scrobbler/0.1.0";
  * The teal.fm feed.play lexicon collection NSID.
  * @type {string}
  */
-const COLLECTION = "fm.teal.alpha.feed.play";
+const COLLECTION = "fm.teal.feed.play";
 
 /**
  * Default handle-resolution endpoint (Bluesky's AppView).
@@ -134,7 +134,7 @@ function parseArtists(line1) {
 
 /**
  * TealClient submits qualifying plays to a user's PDS as
- * `fm.teal.alpha.feed.play` records via the AT Protocol.
+ * `fm.teal.feed.play` records via the AT Protocol.
  *
  * Authentication uses a Bluesky **app password** (not the account password).
  * The client resolves the handle → DID → PDS endpoint, creates a session,
@@ -330,7 +330,7 @@ class TealClient extends EventEmitter {
     }
 
     /**
-     * Build a `fm.teal.alpha.feed.play` record from a ProgressTracker
+     * Build a `fm.teal.feed.play` record from a ProgressTracker
      * `qualified_play` event.
      *
      * This is a **static** helper — no authentication or network access

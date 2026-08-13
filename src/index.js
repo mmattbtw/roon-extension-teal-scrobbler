@@ -17,7 +17,7 @@ const { RetryQueue }      = require("./retry-queue");
 /**
  * teal.fm Scrobbler — Roon Extension
  *
- * Scrobbles qualifying plays to a user's PDS as fm.teal.alpha.feed.play records.
+ * Scrobbles qualifying plays to a user's PDS as fm.teal.feed.play records.
  *
  * Architecture:
  *   Roon Core → ZoneWatcher → { ZoneAllowlist (filter), ProgressTracker (threshold) }

@@ -1,7 +1,7 @@
 {
   "name": "roon-extension-teal-scrobbler",
   "version": "0.1.0",
-  "description": "Roon extension that scrobbles qualifying plays to teal.fm as fm.teal.alpha.feed.play records",
+  "description": "Roon extension that scrobbles qualifying plays to teal.fm as fm.teal.feed.play records",
   "main": "src/index.js",
   "scripts": {
     "start": "node --env-file-if-exists=.env src/index.js",

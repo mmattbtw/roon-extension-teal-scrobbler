@@ -1,14 +1,14 @@
 # teal.fm Scrobbler for Roon
 
 A Roon extension that scrobbles qualifying plays to your PDS as
-`fm.teal.alpha.feed.play` records via the AT Protocol.
+`fm.teal.feed.play` records via the AT Protocol.
 
 ## How it works
 
 ```
 ┌────────────┐   subscribe_zones   ┌──────────────────────┐   createRecord    ┌───────────┐
 │  Roon Core │ ──────────────────▶ │  Roon Extension      │ ────────────────▶ │  Your PDS │
-│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.alpha.   │ (Bluesky) │
+│ (transport)│  zone deltas +      │  • zone allowlist    │  fm.teal.          │ (Bluesky) │
 └────────────┘  now_playing        │  • progress tracker  │  feed.play        └───────────┘
                                    │  • teal.fm client    │
                                    │  • retry queue       │
